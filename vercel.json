@@ -7,11 +7,11 @@
     },
     {
       "src": "index.html",
-      "use": "@vercel/static-build"
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/(.*)", "dest": "/index.html" }
-  ],
+  ]
 }
