@@ -1,12 +1,18 @@
 // api/chat.js
 export default async function handler(req, res) {
+  // Chỉ chấp nhận POST
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { message, history } = req.body;
-
   try {
+    const { message, history } = req.body;
+
+    // Kiểm tra dữ liệu đầu vào
+    if (!message || message.trim() === "") {
+      return res.status(400).json({ error: "Message is required." });
+    }
+
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -16,20 +22,32 @@ export default async function handler(req, res) {
       body: JSON.stringify({
         model: "gpt-4o-mini",
         messages: [
-          { role: "system", content: "B?n l� AI Tri?t h?c Kinh t? M�c-L�nin, c� kh? n�ng ph�n t�ch h?c thu?t s�u, ph?n bi?n, v� v?n d?ng th?c t? linh ho?t. H?y tr? l?i m?t c�ch ch?t ch?, logic v� c� chi?u s�u tri?t h?c, k? c? khi c�u h?i ngo�i gi�o tr?nh." },
+          {
+            role: "system",
+            content:
+              "Bạn là một AI Triết học Mác–Lênin, có khả năng phân tích học thuật sâu, phản biện biện chứng và vận dụng linh hoạt. Hãy trả lời bằng tiếng Việt, rõ ràng, có ví dụ, lập luận logic, liên hệ thực tiễn Việt Nam nếu có thể."
+          },
           ...(history || []),
-          { role: "user", content: message },
+          { role: "user", content: message }
         ],
         temperature: 0.8,
       }),
     });
 
+    if (!response.ok) {
+      const errText = await response.text();
+      console.error("OpenAI API Error:", errText);
+      return res.status(response.status).json({ error: "OpenAI API error", details: errText });
+    }
+
     const data = await response.json();
-    const content = data.choices?.[0]?.message?.content || "Kh�ng th? ph�n t�ch ��?c c�u h?i n�y.";
+    const content =
+      data.choices?.[0]?.message?.content ||
+      "Xin lỗi, tôi chưa thể phân tích được câu hỏi này.";
 
     res.status(200).json({ reply: content });
   } catch (err) {
-    console.error("Error:", err);
-    res.status(500).json({ error: "OpenAI API call failed." });
+    console.error("Server Error:", err);
+    res.status(500).json({ error: "Internal server error", details: err.message });
   }
 }

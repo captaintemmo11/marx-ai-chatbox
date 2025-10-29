@@ -7,93 +7,134 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Merriweather:wght@700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #ffffff;
-      --muted: #6b7280;
-      --primary: #111827;
       --accent: #c41e3a;
+      --bg: #ffffff;
+      --text: #111111;
+      --muted: #6b7280;
     }
     body {
-      margin: 0; padding: 20px;
-      font-family: 'Inter', system-ui;
-      background: #f5f6f7; color: var(--primary);
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Inter", system-ui;
+      padding: 20px;
     }
     .app {
       display: grid;
-      grid-template-columns: 350px 1fr;
+      grid-template-columns: 340px 1fr;
       max-width: 1300px;
       margin: auto;
-      background: white;
-      border-radius: 14px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
       overflow: hidden;
     }
-    @media(max-width:900px){ .app{grid-template-columns:1fr;} }
+    @media(max-width: 900px) { .app { grid-template-columns: 1fr; } }
 
-    .left { padding:20px; border-right:1px solid #eee; }
+    .left {
+      border-right: 1px solid #eee;
+      padding: 20px;
+      background: #fafafa;
+    }
+    .left h2 {
+      font-family: "Merriweather", serif;
+      color: var(--accent);
+    }
     .topic {
-      background:#f9fafb;
-      border-left:4px solid var(--accent);
-      padding:10px;
-      border-radius:8px;
-      margin:10px 0;
-      cursor:pointer;
+      background: #fff;
+      border-left: 4px solid var(--accent);
+      padding: 10px 12px;
+      margin: 8px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
     }
-    .topic:hover { background:#fff3f3; }
+    .topic:hover {
+      background: #fff3f3;
+      transform: scale(1.01);
+    }
 
-    .right { padding:20px; display:flex; flex-direction:column; }
-
+    .right {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+    }
     .view {
-      flex:1; overflow:auto;
-      padding:10px;
-      border:1px solid #eee;
-      border-radius:10px;
-      background:#fff;
+      flex: 1;
+      overflow-y: auto;
+      border: 1px solid #eee;
+      border-radius: 10px;
+      padding: 12px;
+      background: #fff;
     }
-    .msg { margin:10px 0; display:flex; }
-    .msg.user { justify-content:flex-end; }
-    .msg.ai { justify-content:flex-start; }
-
+    .msg {
+      margin: 10px 0;
+      display: flex;
+    }
+    .msg.user {
+      justify-content: flex-end;
+    }
+    .msg.ai {
+      justify-content: flex-start;
+    }
     .bubble {
-      padding:12px 14px;
-      border-radius:12px;
-      max-width:80%;
-      line-height:1.5;
+      padding: 12px 14px;
+      border-radius: 12px;
+      line-height: 1.6;
+      max-width: 80%;
+      white-space: pre-line;
+      font-size: 15px;
     }
     .msg.user .bubble {
       background: #fef2f2;
+      border: 1px solid #f5c2c2;
       color: #111;
-      border:1px solid #f5c2c2;
     }
     .msg.ai .bubble {
-      background:#f9fafb;
-      border:1px solid #e5e7eb;
-      color:#111;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      color: #111;
     }
-
+    .input-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
     textarea {
-      flex:1; border:1px solid #ddd;
-      border-radius:10px; padding:10px;
-      resize:none; font-family:inherit;
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px;
+      resize: none;
+      font-family: inherit;
+      font-size: 15px;
     }
     button {
-      background: var(--accent); color: white;
-      border:none; border-radius:10px;
-      padding:10px 16px; cursor:pointer;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 16px;
+      cursor: pointer;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
   <div class="app">
     <div class="left">
-      <h2 style="color:#c41e3a;font-family:Merriweather;">Triết học Mác–Lênin</h2>
-      <p>Chọn chủ đề hoặc đặt câu hỏi bất kỳ để AI phân tích theo phong cách học thuật.</p>
+      <h2>Triết học Mác–Lênin</h2>
+      <p style="font-size:14px;color:#555;">Chọn chủ đề hoặc đặt câu hỏi bất kỳ để AI phân tích theo phong cách học thuật, biện chứng.</p>
       <div id="topics"></div>
     </div>
+
     <div class="right">
       <div class="view" id="view">
-        <div class="msg ai"><div class="bubble">Xin chào! Tôi là AI Triết học. Bạn có thể hỏi về giá trị thặng dư, tích lũy tư bản, hình thức biểu hiện hoặc liên hệ Việt Nam.</div></div>
+        <div class="msg ai">
+          <div class="bubble">Xin chào! 👋 Tôi là AI Triết học Mác–Lênin. Bạn có thể hỏi tôi về giá trị thặng dư, tích lũy tư bản, hình thức biểu hiện hoặc thực tiễn Việt Nam.</div>
+        </div>
       </div>
-      <div style="margin-top:10px;display:flex;gap:10px;">
+      <div class="input-row">
         <textarea id="user-input" placeholder="Nhập câu hỏi của bạn..."></textarea>
         <button id="send">Gửi</button>
       </div>
@@ -101,214 +142,160 @@
   </div>
 
 <script>
-const OPENAI_API_KEY = const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-
 const KNOWLEDGE_BASE = {
-
   "3.1": {
     title: "3.1 Lý luận của C. Mác về giá trị thặng dư",
     text: `
-<strong>🔹 Khái niệm:</strong><br>
-Giá trị thặng dư (GTTD) là phần giá trị mới mà người lao động tạo ra vượt quá giá trị sức lao động của họ — phần này bị nhà tư bản chiếm đoạt không trả công.<br><br>
+🔹 **Khái niệm:**
+Giá trị thặng dư (GTTD) là phần giá trị mới mà người lao động tạo ra vượt quá giá trị sức lao động – phần này bị nhà tư bản chiếm đoạt.
 
-<strong>🔹 Cấu trúc giá trị hàng hoá:</strong><br>
-Theo C.Mác, giá trị hàng hóa được cấu thành bởi:<br>
-<em>Giá trị hàng hoá (W) = c + v + m</em><br>
-• <strong>c</strong> – tư bản bất biến (constant capital): giá trị tư liệu sản xuất được chuyển nguyên vẹn vào sản phẩm.<br>
-• <strong>v</strong> – tư bản khả biến (variable capital): giá trị sức lao động, trả dưới dạng tiền lương.<br>
-• <strong>m</strong> – giá trị thặng dư (surplus value): phần giá trị mới do lao động tạo ra vượt trên v.<br><br>
+🔹 **Cấu trúc giá trị hàng hoá:**
+W = c + v + m
+- c: tư bản bất biến (giá trị tư liệu sản xuất)
+- v: tư bản khả biến (giá trị sức lao động)
+- m: giá trị thặng dư (lao động không công)
 
-<strong>🔹 Quá trình sản xuất GTTD:</strong><br>
-Trong sản xuất tư bản chủ nghĩa, lao động của công nhân chia thành:<br>
-• <em>Thời gian lao động tất yếu (t₁):</em> tạo ra giá trị tương đương tiền lương (v).<br>
-• <em>Thời gian lao động thặng dư (t₂):</em> tạo ra giá trị thặng dư (m).<br>
-→ Công thức cơ bản: <strong>m = t₂ / t₁ × v</strong><br>
-→ Tỷ suất giá trị thặng dư: <strong>m’ = m / v × 100%</strong><br><br>
+🔹 **Quá trình sản xuất GTTD:**
+Thời gian lao động gồm:
+- t₁: thời gian tất yếu (tạo giá trị tương đương tiền lương)
+- t₂: thời gian thặng dư (tạo giá trị thặng dư)
+→ m’ = m / v × 100%
 
-<strong>🔹 Bản chất:</strong><br>
-• GTTD không phải do tư bản sinh ra, mà do lao động sống tạo ra.<br>
-• Lao động là hàng hoá đặc biệt: giá trị sử dụng của nó tạo ra giá trị mới lớn hơn giá trị của bản thân nó.<br><br>
+🔹 **Bản chất:**
+GTTD không do tư bản sinh ra mà do lao động sống tạo ra. Lao động là hàng hoá đặc biệt – giá trị sử dụng của nó tạo ra giá trị mới lớn hơn bản thân nó.
 
-<strong>🔹 Ý nghĩa:</strong><br>
-• Là “hòn đá tảng” của học thuyết kinh tế chính trị Mác.<br>
-• Vạch trần bản chất bóc lột hợp pháp trong quan hệ sản xuất tư bản chủ nghĩa.<br>
-• Là cơ sở khoa học cho đấu tranh giai cấp và lý luận về chủ nghĩa xã hội.`
+🔹 **Ý nghĩa:**
+Nền tảng học thuyết kinh tế chính trị Mác; vạch trần bản chất bóc lột "hợp pháp" trong TBCN.
+`
   },
-
   "3.1.3": {
     title: "3.1.3 Các phương pháp sản xuất giá trị thặng dư",
     text: `
-<strong>🔹 1. Giá trị thặng dư tuyệt đối:</strong><br>
-Thu được bằng cách kéo dài ngày lao động vượt quá thời gian lao động tất yếu (t₁).<br>
-• Ngày lao động = t₁ + t₂<br>
-• Khi kéo dài t₂ ⇒ m↑, m’↑ (tỷ suất GTTD tăng).<br>
-Ví dụ: Lao động 8h → 10h/ngày, nếu 4h đầu là t₁ thì t₂ tăng từ 4h → 6h ⇒ m’ = 6/4 × 100% = 150%.<br>
-<em>Giới hạn:</em> Bị ràng buộc bởi sức khỏe, điều kiện xã hội, luật lao động.<br><br>
+🔹 **1. Giá trị thặng dư tuyệt đối:**
+Tăng bằng cách kéo dài ngày lao động vượt quá thời gian tất yếu.
+- Ngày lao động = t₁ + t₂
+- Ví dụ: 8h → 10h; t₂ tăng từ 4h → 6h → m’ = 150%
 
-<strong>🔹 2. Giá trị thặng dư tương đối:</strong><br>
-Thu được bằng cách rút ngắn thời gian lao động tất yếu (t₁), trong khi tổng thời gian lao động không đổi.<br>
-• Cơ chế: tăng năng suất lao động xã hội → hạ giá trị tư liệu sinh hoạt → giảm giá trị sức lao động.<br>
-• Kết quả: t₁ giảm, t₂ tăng ⇒ m’↑.<br>
-Ví dụ: Ngày lao động 8h, t₁ giảm từ 4h → 3h ⇒ t₂ tăng từ 4h → 5h ⇒ m’ = 5/3 × 100% ≈ 166%.<br><br>
+🔹 **2. Giá trị thặng dư tương đối:**
+Giảm thời gian tất yếu t₁ nhờ tăng năng suất lao động → giá trị sức lao động giảm.
+- Ví dụ: t₁ = 4h → 3h → m’ = 166%
 
-<strong>🔹 3. Giá trị thặng dư siêu ngạch:</strong><br>
-Do doanh nghiệp cá biệt có năng suất lao động cao hơn mức xã hội trung bình.<br>
-• <em>Điều kiện:</em> Giá trị cá biệt (wᵢ) < Giá trị xã hội (wₛ).<br>
-• GTTD siêu ngạch = wₛ – wᵢ.<br>
-Ví dụ: Sản xuất 1 sản phẩm có giá trị xã hội 100, nhưng doanh nghiệp cá biệt chỉ cần 80 → GTTD siêu ngạch = 20.<br><br>
+🔹 **3. Giá trị thặng dư siêu ngạch:**
+Xuất hiện khi giá trị cá biệt < giá trị xã hội.
+- Ví dụ: hàng hóa có giá trị xã hội 100, DN chỉ tốn 80 → GTTD siêu ngạch = 20
 
-<strong>🔹 Ý nghĩa:</strong><br>
-Ba phương pháp đều là cách thức tư bản gia tăng bóc lột lao động, nhưng GTTD tương đối và siêu ngạch là động lực mạnh nhất thúc đẩy tiến bộ kỹ thuật và cạnh tranh trong TBCN.`
+🔹 **Ý nghĩa:**
+Các phương pháp trên cho thấy bản chất TBCN là không ngừng tăng cường bóc lột để tối đa hóa lợi nhuận.
+`
   },
-
   "3.2": {
     title: "3.2 Tích lũy tư bản",
     text: `
-<strong>🔹 Khái niệm:</strong><br>
-Tích lũy tư bản là quá trình chuyển hoá một phần giá trị thặng dư (m) thành tư bản mới (ΔC), nhằm mở rộng quy mô sản xuất.<br>
-<em>Biểu thức:</em> TB' = c + v + m → TB'' = c + Δc + v + Δv<br><br>
+🔹 **Khái niệm:**
+Là quá trình chuyển một phần giá trị thặng dư (m) thành tư bản mới (ΔC).
+Công thức: ΔC = m × a (với a là tỷ lệ tái đầu tư)
 
-<strong>🔹 Quy mô tích lũy phụ thuộc:</strong><br>
-1. Tỷ suất giá trị thặng dư (m’) – càng cao, tích lũy càng lớn.<br>
-2. Năng suất lao động xã hội – càng cao, chi phí sản xuất càng giảm.<br>
-3. Chênh lệch giữa tư bản bất biến và khả biến (c/v).<br><br>
+🔹 **Hệ quả:**
+- Cấu tạo hữu cơ tư bản tăng (c/v ↑)
+- Tích tụ và tập trung tư bản
+- Phân hoá giai cấp: tư bản gia → giàu, công nhân → nghèo
+- Hình thành "quân dự bị công nghiệp"
 
-<strong>🔹 Hệ quả:</strong><br>
-• Cấu tạo hữu cơ tư bản tăng: c/v ↑ → máy móc thay thế lao động sống.<br>
-• Tích tụ tư bản (một doanh nghiệp ngày càng lớn) và tập trung tư bản (nhiều tư bản nhỏ hợp nhất).<br>
-• Phân hoá xã hội: một cực tích lũy tài sản, một cực tích lũy nghèo đói.<br>
-• Hình thành “quân dự bị công nghiệp” – lực lượng lao động thất nghiệp thường trực.<br><br>
-
-<strong>🔹 Công thức Mác mô tả:</strong><br>
-ΔC = m × a<br>
-→ Trong đó <em>a</em> là tỷ lệ tái đầu tư của giá trị thặng dư.<br>
-Nếu m = 100, a = 0.6 → ΔC = 60 → 60% giá trị thặng dư dùng để mở rộng sản xuất.<br><br>
-
-<strong>🔹 Ý nghĩa:</strong><br>
-Tích lũy tư bản phản ánh động lực nội tại của TBCN, đồng thời cũng là nguyên nhân sâu xa của bất bình đẳng xã hội.`
+🔹 **Ý nghĩa:**
+Phản ánh động lực mở rộng của TBCN, đồng thời là nguyên nhân của bất bình đẳng xã hội.
+`
   },
-
   "3.3": {
     title: "3.3 Các hình thức biểu hiện của giá trị thặng dư",
     text: `
-<strong>🔹 1. Lợi nhuận (p):</strong><br>
-<em>Công thức:</em> p = G – k = m<br>
-• Chi phí sản xuất (k) = c + v.<br>
-• Tỷ suất lợi nhuận: p’ = p / (c + v) × 100%.<br>
-• Lợi nhuận bình quân (P): hình thành qua cạnh tranh giữa các ngành, dẫn đến <em>tỷ suất lợi nhuận bình quân</em>.<br><br>
+🔹 **1. Lợi nhuận (p):**
+p = G – k = m; p’ = p / (c + v) × 100%
 
-<strong>🔹 2. Lợi tức (Z):</strong><br>
-Phần lợi nhuận bình quân trả cho người cho vay vốn.<br>
-• Tỷ suất lợi tức: Z’ = Z / (TBCV) × 100%.<br>
-→ Lợi tức phản ánh sự phân chia GTTD giữa nhà tư bản công nghiệp và tư bản cho vay.<br><br>
+🔹 **2. Lợi tức (Z):**
+Phần lợi nhuận bình quân trả cho người cho vay vốn.
+Z’ = Z / (TBCV) × 100%
 
-<strong>🔹 3. Địa tô tư bản chủ nghĩa:</strong><br>
-Phần lợi nhuận siêu ngạch còn lại sau khi trả lợi nhuận bình quân cho địa chủ.<br>
-• <em>Địa tô chênh lệch I:</em> do khác biệt tự nhiên về độ màu mỡ, vị trí đất.<br>
-• <em>Địa tô chênh lệch II:</em> do đầu tư thâm canh tăng năng suất.<br>
-• <em>Địa tô tuyệt đối:</em> do chế độ tư hữu ruộng đất tạo ra.<br><br>
+🔹 **3. Địa tô tư bản chủ nghĩa:**
+- Địa tô chênh lệch I, II, địa tô tuyệt đối.
+- Nguồn gốc: phần lợi nhuận siêu ngạch từ đất.
 
-<strong>🔹 4. Biểu hiện hiện đại:</strong><br>
-Trong thời đại kỹ thuật số, giá trị thặng dư biểu hiện dưới hình thức:<br>
-• “Data rent”: giá trị thu được từ dữ liệu người dùng (Facebook, Google).<br>
-• “Platform rent”: phần trăm hoa hồng các nền tảng như Uber, AppStore.<br>
-• “Algorithm rent”: lợi ích từ thuật toán độc quyền (AI, big data).<br><br>
-
-<strong>🔹 Ý nghĩa:</strong><br>
-Các hình thức lợi nhuận – lợi tức – địa tô che giấu nguồn gốc lao động của GTTD, làm cho bóc lột trở nên “vô hình” nhưng sâu sắc hơn.`
+🔹 **Hiện đại:**
+"Data rent", "Platform rent", "Algorithm rent" – bóc lột bằng dữ liệu, nền tảng, thuật toán.
+`
   },
-
   "vietnam": {
-    title: "Thực tiễn tại Việt Nam qua lăng kính Mác – Lênin",
+    title: "Thực tiễn tại Việt Nam",
     text: `
-<strong>🔹 1. GTTD trong doanh nghiệp FDI:</strong><br>
-Công nhân Samsung, Foxconn, PouYuen làm 8h/ngày, lương ~8–10 triệu/tháng, nhưng tạo ra sản phẩm trị giá hàng trăm triệu đồng.<br>
-→ Phần chênh lệch đó chính là giá trị thặng dư bị chiếm đoạt.<br><br>
+🔹 **1. GTTD trong FDI:**
+Công nhân Samsung, Foxconn làm 8h, tạo giá trị gấp 4–5 lần lương nhận được.
 
-<strong>🔹 2. Tích lũy tư bản ở Việt Nam:</strong><br>
-• Tích lũy chủ yếu thông qua tái đầu tư FDI: hơn 70% lợi nhuận được tái đầu tư.<br>
-• Cấu tạo hữu cơ tăng nhanh trong các ngành công nghiệp – máy móc thay thế lao động phổ thông.<br>
-• Hệ quả: bất bình đẳng thu nhập, chênh lệch vùng miền, hình thành tầng lớp “tư sản mới”.<br><br>
+🔹 **2. Tích lũy tư bản:**
+70% lợi nhuận FDI tái đầu tư → tăng tích lũy tư bản, song cũng tăng bất bình đẳng.
 
-<strong>🔹 3. Hình thức biểu hiện mới:</strong><br>
-• Lợi nhuận siêu ngạch trong ngành công nghệ (FPT, VNG, VinFast).<br>
-• “Địa tô kỹ thuật số” thông qua dữ liệu người dùng và bản quyền phần mềm.<br>
-• Tích tụ tư bản trong bất động sản, tài chính, nền tảng số.<br><br>
+🔹 **3. Hình thức biểu hiện mới:**
+Lợi nhuận siêu ngạch (FPT, VNG), "địa tô dữ liệu", bất động sản, tài chính.
 
-<strong>🔹 4. Định hướng khắc phục:</strong><br>
-• Nâng cao giá trị sức lao động: tăng lương tối thiểu, phát triển công đoàn độc lập.<br>
-• Nhà nước điều tiết bằng thuế lũy tiến, chính sách phúc lợi xã hội.<br>
-• Hướng tới nền kinh tế thị trường <em>định hướng xã hội chủ nghĩa</em>, bảo đảm hài hòa giữa tăng trưởng và công bằng.`
+🔹 **4. Giải pháp:**
+Tăng giá trị sức lao động, điều tiết qua thuế, hướng tới kinh tế thị trường định hướng XHCN.
+`
   }
-
 };
 
-
-function appendMessage(role, text){
-  const wrap = document.createElement('div');
-  wrap.className = 'msg ' + role;
-  const b = document.createElement('div');
-  b.className = 'bubble';
-  b.innerHTML = text;
-  wrap.appendChild(b);
-  document.getElementById('view').appendChild(wrap);
-  document.getElementById('view').scrollTop = 9999;
+function appendMessage(role, text) {
+  const msg = document.createElement("div");
+  msg.className = "msg " + role;
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.innerHTML = text;
+  msg.appendChild(bubble);
+  document.getElementById("view").appendChild(msg);
+  document.getElementById("view").scrollTop = 999999;
 }
 
-async function handleQuestion(q){
-  if(!q.trim()) return;
-  appendMessage('user', q);
-  document.getElementById('user-input').value = '';
+async function handleQuestion(q) {
+  if (!q.trim()) return;
+  appendMessage("user", q);
+  document.getElementById("user-input").value = "";
 
   const lower = q.toLowerCase();
-  let kbKey = null;
-  if(lower.includes('giá trị thặng dư')) kbKey = "3.1";
-  else if(lower.includes('phương pháp')) kbKey = "3.1.3";
-  else if(lower.includes('tích lũy')) kbKey = "3.2";
-  else if(lower.includes('hình thức')) kbKey = "3.3";
-  else if(lower.includes('việt nam')) kbKey = "vietnam";
+  const matched = Object.entries(KNOWLEDGE_BASE).find(([k, v]) => lower.includes(v.title.split(" ")[1].toLowerCase()));
+  if (matched) {
+    const [_, v] = matched;
+    appendMessage("ai", `<strong>${v.title}</strong><br>${v.text.replace(/\n/g, "<br>")}`);
+    return;
+  }
 
-  if(kbKey){
-    appendMessage('ai', `<strong>${KNOWLEDGE_BASE[kbKey].title}</strong><br>${KNOWLEDGE_BASE[kbKey].text}`);
-  } else {
-    appendMessage('ai', "Đang phân tích sâu...");
-    try {
-      const resp = await fetch("https://api.openai.com/v1/chat/completions", {
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json",
-          "Authorization":"Bearer " + OPENAI_API_KEY
-        },
-        body: JSON.stringify({
-          model:"gpt-4o-mini",
-          messages:[
-            {role:"system", content:"Bạn là trợ lý triết học Mác–Lênin, trả lời tiếng Việt, phong cách học thuật sâu, biện chứng, có ví dụ và kết luận."},
-            {role:"user", content:q}
-          ]
-        })
-      });
-      const data = await resp.json();
-      const msg = data?.choices?.[0]?.message?.content || "Không có phản hồi từ API.";
-      appendMessage('ai', msg.replace(/\n/g,'<br>'));
-    } catch(e){
-      appendMessage('ai', "❗ Lỗi khi gọi OpenAI API: " + e.message);
-    }
+  appendMessage("ai", "⏳ Đang phân tích sâu...");
+
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: q }),
+    });
+    const data = await res.json();
+    appendMessage("ai", data.reply.replace(/\n/g, "<br>"));
+  } catch (err) {
+    appendMessage("ai", "⚠️ Lỗi khi gọi API: " + err.message);
   }
 }
 
-document.getElementById('send').addEventListener('click',()=>handleQuestion(document.getElementById('user-input').value));
-document.getElementById('user-input').addEventListener('keypress',e=>{
-  if(e.key==='Enter' && !e.shiftKey){e.preventDefault();handleQuestion(e.target.value);}
+// render topics
+const topicsEl = document.getElementById("topics");
+Object.values(KNOWLEDGE_BASE).forEach(v => {
+  const el = document.createElement("div");
+  el.className = "topic";
+  el.innerHTML = `<strong>${v.title}</strong><br><span style="font-size:13px;color:#555;">${v.text.slice(0, 80)}...</span>`;
+  el.onclick = () => appendMessage("ai", `<strong>${v.title}</strong><br>${v.text.replace(/\n/g, "<br>")}`);
+  topicsEl.appendChild(el);
 });
 
-// render topics
-const topicsEl = document.getElementById('topics');
-Object.values(KNOWLEDGE_BASE).forEach(k=>{
-  const d=document.createElement('div');
-  d.className='topic';
-  d.innerHTML=`<strong>${k.title}</strong><br><span style="font-size:13px">${k.text.slice(0,80)}...</span>`;
-  d.onclick=()=>handleQuestion(k.title);
-  topicsEl.appendChild(d);
+document.getElementById("send").addEventListener("click", () => handleQuestion(document.getElementById("user-input").value));
+document.getElementById("user-input").addEventListener("keypress", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    handleQuestion(e.target.value);
+  }
 });
 </script>
 </body>
