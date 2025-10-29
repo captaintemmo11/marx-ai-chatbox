@@ -1,18 +1,15 @@
 export default async function handler(req, res) {
-  // ✅ Chỉ chấp nhận POST requests
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
-    const { message, history } = req.body || {};
+    const { message, history } = req.body;
 
-    // ✅ Kiểm tra dữ liệu đầu vào
-    if (!message || typeof message !== "string" || !message.trim()) {
+    if (!message || message.trim() === "") {
       return res.status(400).json({ error: "Message is required." });
     }
 
-    // ✅ Gọi API OpenAI
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -25,25 +22,26 @@ export default async function handler(req, res) {
           {
             role: "system",
             content:
-              "Bạn là một AI Triết học Mác–Lênin, có khả năng phân tích học thuật sâu, phản biện biện chứng và vận dụng linh hoạt. Hãy trả lời bằng tiếng Việt, rõ ràng, có ví dụ, lập luận logic, liên hệ thực tiễn Việt Nam nếu có thể."
+              "Bạn là một AI Triết học Mác–Lênin, trả lời học thuật sâu, phản biện, logic, ví dụ cụ thể, liên hệ Việt Nam."
           },
           ...(history || []),
           { role: "user", content: message }
         ],
-        temperature: 0.8,
       }),
     });
 
-    // ✅ Nếu OpenAI trả lỗi (ví dụ: key sai, quota hết,...)
     if (!response.ok) {
       const errText = await response.text();
       console.error("OpenAI API Error:", errText);
-      return res.status(response.status).json({
-        error: "OpenAI API error",
-        details: errText.slice(0, 200) // tránh log quá dài
-      });
+      return res.status(500).json({ error: "OpenAI API error", details: errText });
     }
 
-    // ✅ Parse JSON an toàn
-    const data = await res
+    const data = await response.json();
+    const reply = data.choices?.[0]?.message?.content || "Không có phản hồi từ API.";
+    res.status(200).json({ reply });
 
+  } catch (err) {
+    console.error("Server Error:", err);
+    res.status(500).json({ error: "Internal Server Error", details: err.message });
+  }
+}
