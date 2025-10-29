@@ -268,16 +268,23 @@ async function handleQuestion(q) {
   appendMessage("ai", "⏳ Đang phân tích sâu...");
 
   try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: q }),
-    });
-    const data = await res.json();
-    appendMessage("ai", data.reply.replace(/\n/g, "<br>"));
-  } catch (err) {
-    appendMessage("ai", "⚠️ Lỗi khi gọi API: " + err.message);
+  const res = await fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: q })
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Server error: ${text}`);
   }
+
+  const data = await res.json();
+  appendMessage("ai", data.reply.replace(/\n/g, "<br>"));
+} catch (err) {
+  appendMessage("ai", "⚠️ Lỗi khi gọi API: " + err.message);
+}
+
 }
 
 // render topics
